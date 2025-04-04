@@ -1,0 +1,88 @@
+[gd_scene load_steps=10 format=3 uid="uid://ri637bq4nwjf"]
+
+[ext_resource type="Texture2D" uid="uid://cs0rr23o77k3l" path="res://furniture/sprites/shrub_normal.png" id="1_b1xcs"]
+[ext_resource type="Texture2D" uid="uid://kpv54inkg3n0" path="res://furniture/sprites/shrub.png" id="1_lodfj"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_42n00"]
+viewport_path = NodePath("shrub/SubViewportContainer/diffuse")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_qves1"]
+viewport_path = NodePath("shrub/SubViewportContainer/normal")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wxbce"]
+resource_local_to_scene = true
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+albedo_texture = SubResource("ViewportTexture_42n00")
+normal_enabled = true
+normal_texture = SubResource("ViewportTexture_qves1")
+texture_filter = 0
+billboard_mode = 2
+
+[sub_resource type="QuadMesh" id="QuadMesh_kh0dt"]
+resource_local_to_scene = true
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_8x68y"]
+diffuse_texture = ExtResource("1_lodfj")
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_rj715"]
+diffuse_texture = ExtResource("1_b1xcs")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_u56oh"]
+size = Vector3(0.3, 0.75, 0.3)
+
+[node name="Furniture" type="Node3D"]
+
+[node name="shrub" type="MeshInstance3D" parent="."]
+material_override = SubResource("StandardMaterial3D_wxbce")
+mesh = SubResource("QuadMesh_kh0dt")
+skeleton = NodePath("")
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="shrub"]
+light_mask = 0
+visibility_layer = 0
+texture_filter = 1
+texture_repeat = 1
+use_parent_material = true
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -8.0
+offset_top = -16.0
+offset_right = 8.0
+grow_horizontal = 2
+grow_vertical = 0
+metadata/_edit_use_anchors_ = true
+
+[node name="diffuse" type="SubViewport" parent="shrub/SubViewportContainer"]
+transparent_bg = true
+handle_input_locally = false
+snap_2d_transforms_to_pixel = true
+snap_2d_vertices_to_pixel = true
+canvas_item_default_texture_filter = 0
+size = Vector2i(16, 16)
+render_target_update_mode = 4
+
+[node name="Sprite2D" type="Sprite2D" parent="shrub/SubViewportContainer/diffuse"]
+texture = SubResource("CanvasTexture_8x68y")
+offset = Vector2(8, 8)
+
+[node name="normal" type="SubViewport" parent="shrub/SubViewportContainer"]
+transparent_bg = true
+handle_input_locally = false
+snap_2d_transforms_to_pixel = true
+snap_2d_vertices_to_pixel = true
+size = Vector2i(16, 16)
+render_target_update_mode = 4
+
+[node name="Sprite2D" type="Sprite2D" parent="shrub/SubViewportContainer/normal"]
+texture = SubResource("CanvasTexture_rj715")
+offset = Vector2(8, 8)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="shrub"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="shrub/StaticBody3D"]
+shape = SubResource("BoxShape3D_u56oh")
